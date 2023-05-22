@@ -1,7 +1,8 @@
+import "dotenv/config";
 import mongoose from "mongoose";
 import logger from "./logger";
 
-const mongooseUrl: string = "mongodb://localhost:27017/practice";
+const mongooseUrl: string | undefined = process.env.MONGOOSE_URL;
 
 const dbConnection = async (): Promise<void> => {
   if (!mongooseUrl) {

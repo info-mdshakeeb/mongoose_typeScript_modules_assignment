@@ -36,3 +36,9 @@ export const getBooksByRating = async (req: Request, res: Response) => {
   const books = await getBooksByRatingFrDb(rating);
   res.status(200).send(books);
 };
+
+//
+// export const convertPriceToNumber = async (req: Request, res: Response) => {
+//   const result = convertPriceToNumberFrDb();
+//   res.status(200).send(result);
+// };

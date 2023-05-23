@@ -18,3 +18,24 @@ export const getBooksByGenreAndPublisherFrDb = async (
 // find by rating :
 export const getBooksByRatingFrDb = async (rating: number): Promise<IBooks[]> =>
   book.find({ rating: { $gte: rating } });
+
+export const convertPriceToNumberFrDb = async () =>
+  book.updateMany(
+    {
+      publicationYear: { $gt: 2020 },
+      price: { $type: "string" },
+    },
+    [
+      {
+        $set: {
+          price: {
+            $cond: {
+              if: { $: ["$publicationYear", 2020] },
+              then: { $toInt: "$price" },
+              else: "$price",
+            },
+          },
+        },
+      },
+    ]
+  );

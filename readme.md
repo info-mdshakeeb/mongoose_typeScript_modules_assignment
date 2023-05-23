@@ -26,6 +26,30 @@ Answer: added the model in the ./models/books folder
 
 ### Task 5: In the existing book data, some books have their prices stored as strings instead of integers. To ensure consistent data representation, you are required to update the prices of all books from string format to integer format using a MongoDB update query. However, to limit the scope of the update and ensure data accuracy, the prices should be updated only for books published after 2020.
 
+#### it is working in nosqlbooster
+
+```ts
+db.books.updateMany(
+  {
+    publicationYear: { $gt: 2020 }, // Filter books published after 2020
+    price: { $type: "string" }, // Filter books with price stored as string
+  },
+  [
+    {
+      $set: {
+        price: {
+          $cond: {
+            if: { $: ["$publicationYear", 2020] },
+            then: { $toInt: "$price" },
+            else: "$price",
+          },
+        },
+      },
+    },
+  ]
+);
+```
+
 ### Question 1: What is the purpose of creating a model with an interface and schema in MongoDB? How does it help in defining the structure of a collection?
 
 #### Answer:
@@ -50,11 +74,13 @@ Answer: added the model in the ./models/books folder
 
 - You can use comparison operators like `$ne`, `$gt`, `$lt`, `$gte`, and `$lte` in MongoDB queries by using the `find()` method. The `find()` method takes a query object as an argument. The query object contains the comparison operators. The comparison operators are used to compare the values of the fields :
 
-1. `"$ne" (not equal):` `db.books.find({ price: { $ne: 10 } })`
-2. `"$gt" (greater than):` `db.books.find({ price: { $gt: 10 } })`
-3. `"$lt" (less than):` `db.books.find({ price: { $lt: 10 } })`
-4. `"$gte" (greater than or equal to):` `db.books.find({ price: { $gte: 10 } })`
-5. `"$lte" (less than or equal to):` `db.books.find({ price: { $lte: 10 } })`
+```ts
+1. `"$ne" (not equal):` db.books.find({ price: { $ne: 10 } });
+2. `"$gt" (greater than):` db.books.find({ price: { $gt: 10 } });
+3. `"$lt" (less than):` db.books.find({ price: { $lt: 10 } });
+4. `"$gte" (greater than or equal to):` db.books.find({ price: { $gte: 10 } });
+5. `"$lte" (less than or equal to):` db.books.find({ price: { $lte: 10 } });
+```
 
 ### Question 5: What are MongoDB’s “$in” and “$nin” operators? How can you use them to match values against an array of values or exclude values from a given array?
 
